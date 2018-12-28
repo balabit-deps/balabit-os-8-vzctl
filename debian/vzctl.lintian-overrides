@@ -1,0 +1,8 @@
+vzctl binary: package-name-doesnt-match-sonames libvzchown-1.0 libvzctl-4.5
+vzctl binary: package-contains-empty-directory usr/lib/vzctl/modules/
+vzctl binary: script-calls-init-script-directly ./etc/vz/dists/scripts/debian-add_ip.sh:168
+vzctl binary: script-calls-init-script-directly ./etc/vz/dists/scripts/debian-del_ip.sh:43
+vzctl binary: script-calls-init-script-directly ./etc/vz/dists/scripts/gentoo-add_ip.sh:114
+vzctl binary: script-calls-init-script-directly ./etc/vz/dists/scripts/gentoo-del_ip.sh:49
+vzctl binary: script-calls-init-script-directly ./etc/vz/dists/scripts/redhat-add_ip.sh:215
+vzctl binary: script-calls-init-script-directly ./etc/vz/dists/scripts/suse-7.x_add_ip.sh:87

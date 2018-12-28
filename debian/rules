@@ -1,0 +1,31 @@
+#!/usr/bin/make -f
+
+override_dh_auto_configure:
+	# Add here commands to configure the package.
+	vzdir=/var/lib/vz dh_auto_configure -- \
+		--libexecdir=/usr/lib/vzctl \
+		--enable-logrotate \
+		--enable-bashcomp \
+		--with-vz \
+		--with-ploop \
+		--with-cgroup \
+		--disable-udev		
+
+override_dh_auto_clean:
+	# Add here commands to clean up after the build process.
+	[ ! -f Makefile ] || $(MAKE) distclean
+	-rm config.log config.status
+
+override_dh_auto_install:
+	# Add here commands to install the package into debian/vzctl.
+	$(MAKE) install install-debian \
+		DESTDIR=$(CURDIR)/debian/vzctl \
+		VPSCONFDIR=/etc/vz/conf NETSCRIPTS=
+	# Useless udev rules file is not needed #520190
+	rm -Rf $(CURDIR)/debian/vzctl/etc/udev
+	# Added to fix a lintian error.
+	# See https://wiki.debian.org/ReleaseGoals/LAFileRemoval
+	sed -i "/dependency_libs/ s/'.*'/''/" `find debian/vzctl -name '*.la'`
+
+%:
+	dh $@

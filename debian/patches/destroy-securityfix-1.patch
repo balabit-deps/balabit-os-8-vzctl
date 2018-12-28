@@ -1,0 +1,29 @@
+Description: destroy-securityfix-1.patch
+ Security fix to make sure the root directory is not removed.
+ .
+Author: Ola Lundqvist <opal@debian.org>
+Last-Update: 2013-08-27
+
+---
+
+In the vzctl 4.5 upgrade half the patch was removed. Maybe this patch should
+be removed.
+
+--- vzctl-4.5.orig/src/lib/destroy.c
++++ vzctl-4.5/src/lib/destroy.c
+@@ -173,6 +173,15 @@ int destroydir(char *dir)
+ 		logger(-1, 0, "Unable to get root for %s", dir);
+ 		return VZ_FS_DEL_PRVT;
+ 	}
++	else if ((strcmp(dir,root) == 0) &&
++		 (strlen(dir) == strlen(root))) {
++	        /* Root is the same as the directory to remove.
++		 * If this is the case we can not rename the directory.
++		 * So skipping that. */
++	        logger(0, 0, "%s is a mounted filesystem. Needs to be unmounted before it can be completely removed.", dir);
++		del_dir(dir);
++		return 0;
++	}
+ 	snprintf(tmp, sizeof(tmp), "%s/vztmp", root);
+ 	free(root);
+ 	if (stat_file(tmp) != 1) {

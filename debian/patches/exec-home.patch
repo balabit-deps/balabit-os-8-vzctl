@@ -1,0 +1,43 @@
+Description: Make sure HOME is set to /root when entering a container
+ This patch make sure the HOME environment variable is set to /root instead
+ of / when entering a container.
+ .
+Author: Ola Lundqvist <opal@debian.org>
+Origin: other
+Forwarded: yes
+Reviewed-By: Ola Lundqvist <opal@debian.org>
+Last-Update: 2014-04-20
+
+--- vzctl-4.7.orig/src/lib/exec.c
++++ vzctl-4.7/src/lib/exec.c
+@@ -37,7 +37,7 @@
+ #include "script.h"
+ 
+ static volatile sig_atomic_t alarm_flag, child_exited;
+-static char *envp_bash[] = {"HOME=/", "TERM=linux", ENV_PATH, NULL};
++static char *envp_bash[] = {"HOME=/root", "TERM=linux", ENV_PATH, NULL};
+ 
+ int execvep(const char *path, char *const argv[], char *const envp[])
+ {
+--- vzctl-4.7.orig/src/lib/env.c
++++ vzctl-4.7/src/lib/env.c
+@@ -248,7 +248,7 @@ int exec_container_init(struct arg_start
+ {
+ 	int fd, ret;
+ 	char *argv[] = {"init", "-z", "      ", NULL};
+-	char *envp[] = {"HOME=/", "TERM=linux", NULL};
++	char *envp[] = {"HOME=/root", "TERM=linux", NULL};
+ 	struct statfs sfs;
+ 
+ 	/* Clear supplementary group IDs */
+--- vzctl-4.7.orig/src/lib/script.c
++++ vzctl-4.7/src/lib/script.c
+@@ -41,7 +41,7 @@
+ #include "cleanup.h"
+ 
+ volatile sig_atomic_t alarm_flag;
+-static char *envp_bash[] = {"HOME=/", "TERM=linux", ENV_PATH, NULL};
++static char *envp_bash[] = {"HOME=/root", "TERM=linux", ENV_PATH, NULL};
+ 
+ int read_script(const char *fname, char *include, char **buf)
+ {

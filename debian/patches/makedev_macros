@@ -1,0 +1,30 @@
+--- vzctl-4.9.4.orig/src/lib/config.c
++++ vzctl-4.9.4/src/lib/config.c
+@@ -25,6 +25,7 @@
+ #include <arpa/inet.h>
+ #include <getopt.h>
+ #include <sys/types.h>
++#include <sys/sysmacros.h>
+ #include <sys/stat.h>
+ #include <linux/vzcalluser.h>
+ #include <unistd.h>
+@@ -1247,8 +1248,8 @@ do {									\
+ 									\
+ 	if (sp == buf)							\
+ 		sp += snprintf(buf, sizeof(buf), "%s=\"", conf->name);	\
+-	major = major(res->dev);					\
+-	minor = minor(res->dev);					\
++	major = gnu_dev_major(res->dev);				\
++	minor = gnu_dev_minor(res->dev);				\
+ 	if (res->use_major) {						\
+ 		r = snprintf(sp, ep - sp, "%c:%d:all:%s ",		\
+ 				S_ISBLK(res->type) ? 'b' : 'c', major,	\
+@@ -1363,7 +1364,7 @@ static int parse_devnodes_str(const char
+ 		logger(-1, 0, "The %s is not block or character device", buf);
+ 		goto err;
+ 	}
+-	if (dev_major_denied(major(st.st_rdev))) {
++	if (dev_major_denied(gnu_dev_major(st.st_rdev))) {
+ 		logger(-1, 0, "Device %s is not allowed "
+ 				"to be assigned to a CT",
+ 				dev->name);

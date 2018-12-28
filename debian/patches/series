@@ -1,0 +1,6 @@
+destroy-securityfix-1.patch
+default-template-debian.patch
+bashism-fix.patch
+exec-home.patch
+makedev_macros
+die_quilt_die

@@ -1,0 +1,21 @@
+Description: The default template is debian instead of centos.
+ The default template name in vz.conf is set to a debian template instead
+ of centos.
+ .
+Author: Ola Lundqvist <opal@debian.org>
+Origin: vendor
+Forwarded: not-needed
+Reviewed-By: Ola Lundqvist <opal@debian.org>
+Last-Update: 2014-04-20
+
+--- vzctl-4.7.orig/etc/vz.conf.in
++++ vzctl-4.7/etc/vz.conf.in
+@@ -41,7 +41,7 @@ TEMPLATE=@VZDIR@/template
+ VE_ROOT=@VZDIR@/root/$VEID
+ VE_PRIVATE=@VZDIR@/private/$VEID
+ CONFIGFILE="vswap-256m"
+-DEF_OSTEMPLATE="centos-6-x86"
++DEF_OSTEMPLATE="debian-7.0-x86"
+ NAMESERVER=inherit # Copy from host system's /etc/resolv.conf
+ ## Filesystem layout for new CTs: either simfs or ploop
+ VE_LAYOUT=ploop

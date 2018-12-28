@@ -1,0 +1,50 @@
+--- vzctl-4.9.4.orig/src/lib/hooks_ct.c
++++ vzctl-4.9.4/src/lib/hooks_ct.c
+@@ -5,6 +5,7 @@
+ #include <string.h>
+ #include <sys/stat.h>
+ #include <sys/types.h>
++#include <sys/sysmacros.h>
+ #include <sys/wait.h>
+ #include <sys/mount.h>
+ #include <fcntl.h>
+@@ -659,7 +660,7 @@ static int deny_devices(vps_handler *h,
+ 	perms[i++] = '\0';
+ 	snprintf(dev_str, STR_SIZE, "%c %d:%d %s",
+ 		S_ISBLK(dev->type) ? 'b' : 'c',
+-		major(dev->dev), minor(dev->dev), perms);
++		gnu_dev_major(dev->dev), gnu_dev_minor(dev->dev), perms);
+ 
+ 	return  container_apply_config(veid, DEVICES_DENY, &dev_str);
+ }
+@@ -698,7 +699,7 @@ static int ct_setdevperm(vps_handler *h,
+ 
+ 	snprintf(dev_str, STR_SIZE, "%c %d:%d %s",
+ 		S_ISBLK(dev->type) ? 'b' : 'c',
+-		major(dev->dev), minor(dev->dev),
++		gnu_dev_major(dev->dev), gnu_dev_minor(dev->dev),
+ 		perms);
+ 
+ 	return container_apply_config(veid, DEVICES_ALLOW, &dev_str);
+--- vzctl-4.9.4.orig/src/lib/vps_configure.c
++++ vzctl-4.9.4/src/lib/vps_configure.c
+@@ -22,6 +22,7 @@
+ #include <stdio.h>
+ #include <string.h>
+ #include <sys/stat.h>
++#include <sys/sysmacros.h>
+ #include <netinet/in.h>
+ #include <linux/vzcalluser.h>
+ 
+@@ -333,9 +334,9 @@ static int vps_quota_configure(vps_handl
+ 			fs_name = vz_fs_get_name();
+ 			snprintf(buf, sizeof(buf), "DEVFS=%s", fs_name);
+ 			envp[i++] = strdup(buf);
+-			snprintf(buf, sizeof(buf), "MINOR=%d", minor(st.st_dev));
++			snprintf(buf, sizeof(buf), "MINOR=%d", gnu_dev_minor(st.st_dev));
+ 			envp[i++] = strdup(buf);
+-			snprintf(buf, sizeof(buf), "MAJOR=%d", major(st.st_dev));
++			snprintf(buf, sizeof(buf), "MAJOR=%d", gnu_dev_major(st.st_dev));
+ 			envp[i++] = strdup(buf);
+ 		}
+ 		else {

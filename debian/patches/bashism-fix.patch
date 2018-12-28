@@ -1,0 +1,49 @@
+Description: bashism fixes
+ Various bashism fixes solved before vzctl 4.5.
+ .
+Author: Ola Lundqvist <opal@debian.org>
+Origin: vendor
+Forwarded: no
+Reviewed-By: Ola Lundqvist <opal@debian.org>
+Last-Update: 2015-04-22
+
+--- vzctl-4.7.orig/etc/dists/scripts/etcnet-add_ip.sh
++++ vzctl-4.7/etc/dists/scripts/etcnet-add_ip.sh
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ #  Copyright (C) 2006-2007 Dmitry V. Levin <ldv@altlinux.org>
+ #
+ #  This program is free software; you can redistribute it and/or modify
+--- vzctl-4.7.orig/bin/vznetcfg.in
++++ vzctl-4.7/bin/vznetcfg.in
+@@ -26,7 +26,8 @@ usage()
+ 
+ init_veth()
+ {
+-	local dev="$1"
++	local dev
++	dev="$1"
+ 
+ 	ip link set "$dev" up
+ }
+--- vzctl-4.7.orig/bin/vzpid.in
++++ vzctl-4.7/bin/vzpid.in
+@@ -40,7 +40,8 @@ header()
+ getveid()
+ {
+ 	local opShow
+-	local pid="$1"
++	local pid
++	pid="$1"
+ 
+ 	[ -f "/proc/$pid/status" ] || return
+ 
+--- vzctl-4.7.orig/bin/vzmigrate.in
++++ vzctl-4.7/bin/vzmigrate.in
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ # Copyright (C) 2000-2015, Parallels, Inc. All rights reserved.
+ #
+ # This program is free software; you can redistribute it and/or
